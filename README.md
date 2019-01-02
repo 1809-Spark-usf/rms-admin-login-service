@@ -1,2 +1,2 @@
-# rms-login-service
+# rms-admin-login-service
 Login service for the resource management system
