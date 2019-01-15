@@ -1,24 +1,8 @@
-package com.revature.models;
+package com.revature.dtos;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
-/**
- * Admin class mapped to database.
- * @author Jaron | 1811-Java-Nick | 1/4/2019
- *
- */
-@Entity
-@Table(name = "admin")
-public class Admin {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int adminId;
-
+public class AdminDto {
+	
 	private String firstname;
 
 	private String lastname;
@@ -43,14 +27,13 @@ public class Admin {
 		this.lastname = lastname;
 	}
 
-	public Admin() {
+	public AdminDto() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Admin(int adminId, String firstname, String lastname, String username, String password) {
+	public AdminDto(int adminId, String firstname, String lastname, String username, String password) {
 		super();
-		this.adminId = adminId;
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.username = username;
@@ -73,18 +56,9 @@ public class Admin {
 		this.password = password;
 	}
 
-	public int getAdminId() {
-		return adminId;
-	}
-
-	public void setAdminId(int adminId) {
-		this.adminId = adminId;
-	}
-
 	@Override
 	public String toString() {
-		return "Admin [adminId=" + adminId + ", firstname=" + firstname + ", lastname=" + lastname + ", username="
+		return "Admin [firstname=" + firstname + ", lastname=" + lastname + ", username="
 				+ username + ", password=" + password + "]";
 	}
-
 }
