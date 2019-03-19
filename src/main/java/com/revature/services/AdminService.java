@@ -1,6 +1,7 @@
 package com.revature.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,7 +51,8 @@ public class AdminService {
 	 * @return
 	 */
 	public Admin getAdminByUsername(String username) {
-		return adminRepository.getAdminByUsername(username);
+		Optional<Admin> result = adminRepository.getAdminByUsername(username);
+		return result.get(); 
 	}
 	
 }

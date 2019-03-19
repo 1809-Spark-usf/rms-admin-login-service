@@ -17,6 +17,10 @@ public class AdminController {
 	@Autowired
 	AdminService adminService;
 	
+	/**
+	 * this doesn't seem to be ever used because the method signiture is not in the repository
+	 * @param adminDto
+	 */
 	@PostMapping
 	public void createAdmin(@RequestBody AdminDto adminDto) {
 		
