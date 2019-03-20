@@ -7,7 +7,6 @@ addons:
 jobs:
   include:
     - stage: pre-build
-      before_install: chmod +x mvnw
       script: mvn clean
 
     - stage: test
