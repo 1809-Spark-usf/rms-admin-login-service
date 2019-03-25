@@ -24,8 +24,8 @@ public class AdminService {
 	 * Saves an admin to the database
 	 * @param admin
 	 */
-	public void createAdmin(Admin admin) {
-		adminRepository.save(admin);
+	public Admin createAdmin(Admin admin) {
+		return adminRepository.save(admin);
 	}
 	
 	/**
