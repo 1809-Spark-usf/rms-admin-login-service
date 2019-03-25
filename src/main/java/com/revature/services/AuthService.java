@@ -1,7 +1,10 @@
 package com.revature.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import com.revature.models.Admin;
 
@@ -27,12 +30,22 @@ public class AuthService {
 	 */
 	public Admin validateAdmin(String username, String password) {
 		
-		Admin admin = adminService.getAdminByUsername(username);
+		Admin admin = null;
+		try {
+			admin = adminService.getAdminByUsername(username);
+		} catch (DataAccessException e) {
+			throw new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong please try again later");
+		} catch (HttpClientErrorException e) {
+			if(e.getStatusCode() == HttpStatus.BAD_REQUEST) {
+				throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Invalid username or password.");
+			}
+		}
 		
 		if(admin != null && password.equals(admin.getPassword())) {
 			return admin;
+		} else {
+			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Invalid username or password");
 		}
 		
-		return null;
 	}
 }
