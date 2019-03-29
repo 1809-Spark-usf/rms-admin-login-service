@@ -1,7 +1,6 @@
 package com.revature.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,7 +37,7 @@ public class AdminService {
 	 * @param id
 	 * @return Admin
 	 */
-	public Admin getAdmin(Integer id) throws HttpClientErrorException {
+	public Admin getAdmin(Integer id) {
 		return adminRepository.findById(id).orElseThrow(
 				() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "Admin with given id was not found."));
 	}
