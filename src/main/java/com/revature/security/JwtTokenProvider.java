@@ -18,6 +18,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import com.revature.exception.CustomException;
+import com.revature.models.Role;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -30,10 +33,10 @@ public class JwtTokenProvider {
    * THIS IS NOT A SECURE PRACTICE! For simplicity, we are storing a static key here. Ideally, in a
    * microservices environment, this key would be kept on a config-server.
    */
-  @Value("${security.jwt.token.secret-key:secret-key}")
+  @Value("${SECRET_KEY:secret-key}")
   private String secretKey;
 
-  @Value("${security.jwt.token.expire-length:3600000}")
+  @Value("${KEY_EXPIRATION_TIME:3600000}")
   private long validityInMilliseconds; // 1h
 
   @Autowired
