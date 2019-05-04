@@ -6,6 +6,14 @@ import org.junit.Test;
 
 import com.revature.models.Admin;
 
+
+/**
+ * Tests for LoginController
+ * 
+ * @author Quinton Cook
+ *
+ */
+
 public class AdminTests {
 
 	@Test
