@@ -39,7 +39,6 @@ public class AdminRepositoryTest {
 		
 		Optional<Admin> adminObj = adminRepository.getAdminByUsername("JimmyD");
 		assertEquals(true,adminObj.isPresent());
-		//assertNotNull(adminObj);
 	}
 	
 	@Test
