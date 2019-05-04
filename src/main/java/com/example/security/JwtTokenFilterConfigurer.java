@@ -5,9 +5,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 
 public class JwtTokenFilterConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
-	
-	private JwtTokenFilterConfigurer jwtTokenFilterConfigurer;
-	
-	public JwtTokenFilterConfigurer()
+
+	private JwtTokenProvider jwtTokenFilterConfigurer;
+
+	public JwtTokenFilterConfigurer(JwtTokenProvider jwtTokenFilterConfigurer) {
+		this.jwtTokenFilterConfigurer = jwtTokenFilterConfigurer;
+	}
 	
 }
