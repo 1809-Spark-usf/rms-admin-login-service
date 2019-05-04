@@ -1,10 +1,15 @@
 package com.revature.dtos;
 
+import java.util.List;
+
+import com.revature.models.Role;
 
 public class AdminDto {
-	
+
 	private int adminId;
-	
+
+	List<Role> roles;
+
 	private String firstname;
 
 	private String lastname;
@@ -12,6 +17,14 @@ public class AdminDto {
 	private String username;
 
 	private String password;
+
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
 
 	public String getFirstname() {
 		return firstname;
@@ -34,13 +47,14 @@ public class AdminDto {
 		// TODO Auto-generated constructor stub
 	}
 
-	public AdminDto(int adminId, String firstname, String lastname, String username, String password) {
+	public AdminDto(int adminId, String firstname, String lastname, String username, String password, List<Role> roles) {
 		super();
 		this.adminId = adminId;
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.username = username;
 		this.password = password;
+		this.roles = roles;
 	}
 
 	public String getUsername() {
@@ -59,12 +73,6 @@ public class AdminDto {
 		this.password = password;
 	}
 
-	@Override
-	public String toString() {
-		return "Admin [firstname=" + firstname + ", lastname=" + lastname + ", username="
-				+ username + ", password=" + password + "]";
-	}
-
 	public int getAdminId() {
 		return adminId;
 	}
@@ -72,4 +80,11 @@ public class AdminDto {
 	public void setAdminId(int adminId) {
 		this.adminId = adminId;
 	}
+
+	@Override
+	public String toString() {
+		return "AdminDto [adminId=" + adminId + ", roles=" + roles + ", firstname=" + firstname + ", lastname="
+				+ lastname + ", username=" + username + ", password=" + password + "]";
+	}
+	
 }

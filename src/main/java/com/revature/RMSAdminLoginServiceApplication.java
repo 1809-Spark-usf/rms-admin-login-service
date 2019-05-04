@@ -7,11 +7,11 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @EnableSwagger2
 @SpringBootApplication
-public class RfAdminLoginServiceApplication {
+public class RMSAdminLoginServiceApplication {
 
 	
 	public static void main(String[] args) {
-		SpringApplication.run(RfAdminLoginServiceApplication.class, args);
+		SpringApplication.run(RMSAdminLoginServiceApplication.class, args);
 	}
 
 }

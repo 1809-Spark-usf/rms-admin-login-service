@@ -1,10 +1,14 @@
-package com.revature.test.AdminDTO;
+package com.revature.test.admindto;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+
+import org.assertj.core.util.Arrays;
 import org.junit.Test;
 
 import com.revature.dtos.AdminDto;
+import com.revature.models.Role;
 
 /**
  * Tests for LoginController
@@ -24,30 +28,41 @@ public class AdminDtoTests {
 		adminDto.setLastname("Dean");
 		adminDto.setUsername("JimmyD");
 		adminDto.setPassword("1234");
+		
+		ArrayList<Role> tmp = new ArrayList<Role>();
+		tmp.add(Role.ROLE_ADMIN);
+		adminDto.setRoles(tmp);
+		
 		assertEquals(20,adminDto.getAdminId());
 		assertEquals("Jimmy",adminDto.getFirstname());
 		assertEquals("Dean",adminDto.getLastname());
 		assertEquals("JimmyD",adminDto.getUsername());
 		assertEquals("1234",adminDto.getPassword());
+		assertEquals(Role.ROLE_ADMIN, adminDto.getRoles().get(0));
 	}
 	
 	@Test
 	public void testAdminDtoConstructor() {
-		AdminDto adminDto2 = new AdminDto(21,"Jimmy","Dean2","JimmyD2","1234");
+		ArrayList<Role> tmp = new ArrayList<Role>();
+		tmp.add(Role.ROLE_ADMIN);
+		AdminDto adminDto2 = new AdminDto(21,"Jimmy","Dean2","JimmyD2","1234",tmp);
+		
 		assertEquals(21,adminDto2.getAdminId());
 		assertEquals("Jimmy",adminDto2.getFirstname());
 		assertEquals("Dean2",adminDto2.getLastname());
 		assertEquals("JimmyD2",adminDto2.getUsername());
 		assertEquals("1234",adminDto2.getPassword());
+		assertEquals(Role.ROLE_ADMIN, adminDto2.getRoles().get(0));
 	}
 	
 	@Test
 	public void testAdminDtoToString() {
-		AdminDto adminDto3 = new AdminDto(21,"Jimmy","Dean3","JimmyD3","1234");
+		ArrayList<Role> tmp = new ArrayList<Role>();
+		tmp.add(Role.ROLE_ADMIN);
+		AdminDto adminDto3 = new AdminDto(21,"Jimmy","Dean3","JimmyD3","1234",tmp);
 		String string = adminDto3.toString();
-		assertEquals(("Admin [firstname=" + adminDto3.getFirstname() + ", lastname=" + adminDto3.getLastname() + ", username="
-				+ adminDto3.getUsername() + ", password=" + adminDto3.getPassword() + "]"), string);
+		
+		assertEquals(("AdminDto [adminId=21" + ", roles=[ROLE_ADMIN]" + ", firstname=Jimmy" + ", lastname=Dean3"
+				+ ", username=JimmyD3" + ", password=1234" + "]"), string);
 	}
-	
-
 }
