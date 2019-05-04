@@ -3,6 +3,8 @@ package com.revature.dtos;
 
 public class AdminDto {
 	
+	private int adminId;
+	
 	private String firstname;
 
 	private String lastname;
@@ -34,6 +36,7 @@ public class AdminDto {
 
 	public AdminDto(int adminId, String firstname, String lastname, String username, String password) {
 		super();
+		this.adminId = adminId;
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.username = username;
@@ -60,5 +63,13 @@ public class AdminDto {
 	public String toString() {
 		return "Admin [firstname=" + firstname + ", lastname=" + lastname + ", username="
 				+ username + ", password=" + password + "]";
+	}
+
+	public int getAdminId() {
+		return adminId;
+	}
+
+	public void setAdminId(int adminId) {
+		this.adminId = adminId;
 	}
 }
