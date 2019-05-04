@@ -35,7 +35,9 @@ public class AdminRepositoryTest {
 		admin.setUsername("JimmyD");
 		admin.setPassword("1234");
 		
-		Optional<Admin> adminObj = adminRepository.getAdminByUsername("Jimmy");
+		adminRepository.save(admin);
+		
+		Optional<Admin> adminObj = adminRepository.getAdminByUsername("JimmyD");
 		assertEquals(true,adminObj.isPresent());
 		//assertNotNull(adminObj);
 	}
