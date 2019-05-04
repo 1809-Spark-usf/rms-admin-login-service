@@ -35,7 +35,6 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
 		// Apply JWT
 		http.apply(new JwtTokenFilterConfigurer(jwtTokenProvider));
-
 	}
 
 	@Override

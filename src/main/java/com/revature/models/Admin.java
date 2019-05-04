@@ -48,9 +48,8 @@ public class Admin {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Admin(int adminId, String firstname, String lastname, String username, String password) {
+	public Admin(String firstname, String lastname, String username, String password) {
 		super();
-		this.adminId = adminId;
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.username = username;
