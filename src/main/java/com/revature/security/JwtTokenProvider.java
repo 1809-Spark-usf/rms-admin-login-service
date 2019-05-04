@@ -1,4 +1,4 @@
-package com.example.security;
+package com.revature.security;
 
 import java.util.Base64;
 import java.util.Date;

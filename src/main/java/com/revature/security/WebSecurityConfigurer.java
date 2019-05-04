@@ -1,4 +1,4 @@
-package com.example.security;
+package com.revature.security;
 
 import org.junit.runner.RunWith;
 import org.springframework.boot.SpringBootConfiguration;
