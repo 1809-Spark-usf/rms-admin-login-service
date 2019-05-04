@@ -18,6 +18,8 @@ public class AdminDto {
 
 	private String password;
 
+	private String token;
+	
 	public List<Role> getRoles() {
 		return roles;
 	}
@@ -44,7 +46,6 @@ public class AdminDto {
 
 	public AdminDto() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public AdminDto(int adminId, String firstname, String lastname, String username, String password, List<Role> roles) {
@@ -81,10 +82,12 @@ public class AdminDto {
 		this.adminId = adminId;
 	}
 
-	@Override
-	public String toString() {
-		return "AdminDto [adminId=" + adminId + ", roles=" + roles + ", firstname=" + firstname + ", lastname="
-				+ lastname + ", username=" + username + ", password=" + password + "]";
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 	
 }

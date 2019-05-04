@@ -5,6 +5,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,20 +14,27 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.controllers.LoginController;
 import com.revature.dtos.AdminDto;
 import com.revature.models.Admin;
+import com.revature.models.Role;
+import com.revature.security.JwtTokenFilter;
+import com.revature.security.JwtTokenProvider;
 import com.revature.services.AuthService;
 
 /**
@@ -34,106 +43,113 @@ import com.revature.services.AuthService;
  * @author Kyne Liu
  *
  */
+
 @RunWith(SpringRunner.class)
-@SpringBootTest
-@AutoConfigureMockMvc
 public class LoginControllerTest {
-	
+
 	private MockMvc mockMvc;
-	
-	private ObjectMapper om;
-	
+
 	@Mock
-	AuthService mockAuthService;
-	
+	JwtTokenProvider provider;
+
+	@MockBean
+	private AuthService mockAuthService;
+
 	@InjectMocks
-	LoginController controller;
-	
+	LoginController loginController;
+
 	@Before
-	public void init() {
+	public void setUp() {
+
 		MockitoAnnotations.initMocks(this);
-		mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-		om = new ObjectMapper();
+
+		mockMvc = MockMvcBuilders.standaloneSetup(loginController)
+				.apply(SecurityMockMvcConfigurers.springSecurity(new JwtTokenFilter(provider))).build();
 	}
-	
+
 	/*----------------------Tests for loginPost(AdminDto) method-----------------------*/
 
 	@Test
-	public void successfulLoginPost() throws JsonProcessingException, Exception{
+	public void successfulLoginPost() throws JsonProcessingException, Exception {
+
+		ObjectMapper om = new ObjectMapper();
+
 		String username = "Username";
 		String password = "password";
 		AdminDto input = new AdminDto();
 		input.setUsername(username);
 		input.setPassword(password);
-		
+
 		int id = 10;
 		Admin returned = new Admin();
 		returned.setAdminId(id);
 		returned.setUsername(username);
 		returned.setPassword(password);
-		 
+
+		ArrayList<Role> tmp = new ArrayList<Role>();
+		tmp.add(Role.ROLE_ADMIN);
+		returned.setRoles(tmp);
+
 		Mockito.when(mockAuthService.validateAdmin(username, password)).thenReturn(returned);
-		
-		mockMvc.perform(post("/login").accept(MediaType.APPLICATION_JSON)
-								.contentType(MediaType.APPLICATION_JSON)
-								.content(om.writeValueAsString(input)))
-				.andDo(print())
-				.andExpect(status().isOk())
+
+		System.out.println(om.writeValueAsString(input));
+
+		mockMvc.perform(post("/login").accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
+				.content(om.writeValueAsString(input))).andDo(print()).andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-				.andExpect(content().bytes(om.writeValueAsBytes(returned)));
+				.andExpect(content().bytes(om.writeValueAsBytes(returned))).andDo(MockMvcResultHandlers.print());
 	}
-	
-	//Wrong password given
+
+	// Wrong password given
 	@Test
 	public void wrongPasswordForLoginPost() throws JsonProcessingException, Exception {
+		ObjectMapper om = new ObjectMapper();
 		String username = "Username";
 		String badPassword = "badPassword";
 		AdminDto input = new AdminDto();
 		input.setUsername(username);
 		input.setPassword(badPassword);
-		
-		Mockito.when(mockAuthService.validateAdmin(username, badPassword)).thenThrow(new HttpClientErrorException(HttpStatus.BAD_REQUEST));
-		
-		mockMvc.perform(post("/login").accept(MediaType.APPLICATION_JSON)
-								.contentType(MediaType.APPLICATION_JSON)
-								.content(om.writeValueAsString(input)))
-				.andDo(print())
-				.andExpect(status().isBadRequest());
+
+		Mockito.when(mockAuthService.validateAdmin(username, badPassword))
+				.thenThrow(new HttpClientErrorException(HttpStatus.BAD_REQUEST));
+
+		mockMvc.perform(post("/login").accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
+				.content(om.writeValueAsString(input))).andDo(print()).andExpect(status().isBadRequest());
 	}
-	
-	//Wrong username given
+
+	// Wrong username given
 	@Test
 	public void wrongUsernameForLoginPost() throws JsonProcessingException, Exception {
+		ObjectMapper om = new ObjectMapper();
+
 		String badUsername = "badUsername";
 		String password = "password";
 		AdminDto input = new AdminDto();
 		input.setUsername(badUsername);
 		input.setPassword(password);
-		
-		Mockito.when(mockAuthService.validateAdmin(badUsername, password)).thenThrow(new HttpClientErrorException(HttpStatus.BAD_REQUEST));
-		
-		mockMvc.perform(post("/login").accept(MediaType.APPLICATION_JSON)
-								.contentType(MediaType.APPLICATION_JSON)
-								.content(om.writeValueAsString(input)))
-				.andDo(print())
-				.andExpect(status().isBadRequest());
+
+		Mockito.when(mockAuthService.validateAdmin(badUsername, password))
+				.thenThrow(new HttpClientErrorException(HttpStatus.BAD_REQUEST));
+
+		mockMvc.perform(post("/login").accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
+				.content(om.writeValueAsString(input))).andDo(print()).andExpect(status().isBadRequest());
 	}
-	
-	//Something goes wrong in the database while fetching the Admin
+
+	// Something goes wrong in the database while fetching the Admin
 	@Test
 	public void adminRepoErrorForLoginPost() throws JsonProcessingException, Exception {
+		ObjectMapper om = new ObjectMapper();
+
 		String username = "Username";
 		String password = "password";
 		AdminDto input = new AdminDto();
 		input.setUsername(username);
 		input.setPassword(password);
-		
-		Mockito.when(mockAuthService.validateAdmin(username, password)).thenThrow(new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR));
-		
-		mockMvc.perform(post("/login").accept(MediaType.APPLICATION_JSON)
-								.contentType(MediaType.APPLICATION_JSON)
-								.content(om.writeValueAsString(input)))
-				.andDo(print())
-				.andExpect(status().is5xxServerError());
+
+		Mockito.when(mockAuthService.validateAdmin(username, password))
+				.thenThrow(new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR));
+
+		mockMvc.perform(post("/login").accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
+				.content(om.writeValueAsString(input))).andDo(print()).andExpect(status().is5xxServerError());
 	}
 }

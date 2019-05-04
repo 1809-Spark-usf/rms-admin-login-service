@@ -28,14 +28,6 @@ public class Admin {
 	@ElementCollection(fetch = FetchType.EAGER)
 	List<Role> roles;
 
-	public List<Role> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(List<Role> roles) {
-		this.roles = roles;
-	}
-
 	private String firstname;
 
 	private String lastname;
@@ -44,6 +36,17 @@ public class Admin {
 
 	private String password;
 
+	private String token;
+	
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
+
+	
 	public String getFirstname() {
 		return firstname;
 	}
@@ -101,6 +104,14 @@ public class Admin {
 	public String toString() {
 		return "Admin [adminId=" + adminId + ", roles=" + roles + ", firstname=" + firstname + ", lastname=" + lastname
 				+ ", username=" + username + ", password=" + password + "]";
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 
 	

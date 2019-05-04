@@ -27,6 +27,7 @@ public class AdminDtoTests {
 		adminDto.setLastname("Dean");
 		adminDto.setUsername("JimmyD");
 		adminDto.setPassword("1234");
+		adminDto.setToken("token");
 		
 		ArrayList<Role> tmp = new ArrayList<Role>();
 		tmp.add(Role.ROLE_ADMIN);
@@ -38,6 +39,7 @@ public class AdminDtoTests {
 		assertEquals("JimmyD",adminDto.getUsername());
 		assertEquals("1234",adminDto.getPassword());
 		assertEquals(Role.ROLE_ADMIN, adminDto.getRoles().get(0));
+		assertEquals("token",adminDto.getToken());
 	}
 	
 	@Test
@@ -54,14 +56,4 @@ public class AdminDtoTests {
 		assertEquals(Role.ROLE_ADMIN, adminDto2.getRoles().get(0));
 	}
 	
-	@Test
-	public void testAdminDtoToString() {
-		ArrayList<Role> tmp = new ArrayList<Role>();
-		tmp.add(Role.ROLE_ADMIN);
-		AdminDto adminDto3 = new AdminDto(21,"Jimmy","Dean3","JimmyD3","1234",tmp);
-		String string = adminDto3.toString();
-		
-		assertEquals(("AdminDto [adminId=21" + ", roles=[ROLE_ADMIN]" + ", firstname=Jimmy" + ", lastname=Dean3"
-				+ ", username=JimmyD3" + ", password=1234" + "]"), string);
-	}
 }
