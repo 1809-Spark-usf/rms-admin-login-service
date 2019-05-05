@@ -5,13 +5,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 
 import com.revature.dtos.AdminDto;
 import com.revature.models.Admin;
 import com.revature.security.JwtTokenProvider;
+import com.revature.services.AdminService;
 import com.revature.services.AuthService;
 
 @RestController
@@ -20,6 +20,9 @@ public class LoginController {
 	@Autowired
 	AuthService authService;
 
+	@Autowired
+	AdminService adminService;
+	
 	@Autowired
 	JwtTokenProvider jwtTokenPovider;
 
@@ -34,7 +37,7 @@ public class LoginController {
 	 */
 	@PostMapping(value = "/login")
 	public Admin loginPost(@RequestBody AdminDto tmp) {
-
+		
 		Admin authAdmin = authService.validateAdmin(tmp.getUsername(), tmp.getPassword());
 
 		String token = jwtTokenPovider.createToken(authAdmin.getUsername(), authAdmin.getRoles());
