@@ -42,13 +42,18 @@ public class JwtTokenProvider {
   @Autowired
   private MyUserDetails myUserDetails;
 
-  @PostConstruct
-  protected void init() {
-    secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
-  }
+//  @PostConstruct
+//  protected void init() {
+//    secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+//  }
+  
+  public JwtTokenProvider() {}
 
   public String createToken(String username, List<Role> roles) {
-
+	
+	  validityInMilliseconds = 10000;
+	  secretKey = "secret-key";
+	  secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     Claims claims = Jwts.claims().setSubject(username);
     claims.put("auth", roles.stream().map(s -> new SimpleGrantedAuthority(s.getAuthority())).filter(Objects::nonNull).collect(Collectors.toList()));
 
