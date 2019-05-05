@@ -29,70 +29,70 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Component
 public class JwtTokenProvider {
 
-  /**
-   * THIS IS NOT A SECURE PRACTICE! For simplicity, we are storing a static key here. Ideally, in a
-   * microservices environment, this key would be kept on a config-server.
-   */
-  @Value("${SECRET_KEY:secret-key}")
-  private String secretKey;
+	/**
+	 * THIS IS NOT A SECURE PRACTICE! For simplicity, we are storing a static key
+	 * here. Ideally, in a microservices environment, this key would be kept on a
+	 * config-server.
+	 */
+	@Value("${SECRET_KEY:secret-key}")
+	private String secretKey;
 
-  @Value("${KEY_EXPIRATION_TIME:3600000}")
-  private long validityInMilliseconds; // 1h
+	@Value("${KEY_EXPIRATION_TIME:3600000}")
+	private long validityInMilliseconds; // 1h
 
-  @Autowired
-  private MyUserDetails myUserDetails;
+	@Autowired
+	private MyUserDetails myUserDetails;
 
-//  @PostConstruct
-//  protected void init() {
-//    secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
-//  }
-  
-  public JwtTokenProvider() {}
+	@PostConstruct
+	protected void init() {
+		secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+	}
 
-  public String createToken(String username, List<Role> roles) {
-	
-	  validityInMilliseconds = 10000;
-	  secretKey = "secret-key";
-	  secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
-    Claims claims = Jwts.claims().setSubject(username);
-    claims.put("auth", roles.stream().map(s -> new SimpleGrantedAuthority(s.getAuthority())).filter(Objects::nonNull).collect(Collectors.toList()));
+	public JwtTokenProvider() {
+		
+	}
 
-    Date now = new Date();
-    Date validity = new Date(now.getTime() + validityInMilliseconds);
-    
-    return Jwts.builder()//
-        .setClaims(claims)//
-        .setIssuedAt(now)//
-        .setExpiration(validity)//
-        .signWith(SignatureAlgorithm.HS256, secretKey)//
-        .compact();
-  }
+	public String createToken(String username, List<Role> roles) {
 
-  public Authentication getAuthentication(String token) {
-    UserDetails userDetails = myUserDetails.loadUserByUsername(getUsername(token));
-    return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getAuthorities());
-  }
+		Claims claims = Jwts.claims().setSubject(username);
+		claims.put("auth", roles.stream().map(s -> new SimpleGrantedAuthority(s.getAuthority()))
+				.filter(Objects::nonNull).collect(Collectors.toList()));
 
-  public String getUsername(String token) {
-    return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
-  }
+		Date now = new Date();
+		Date validity = new Date(now.getTime() + validityInMilliseconds);
 
-  public String resolveToken(HttpServletRequest req) {
-    String bearerToken = req.getHeader("Authorization");
-    if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-      return bearerToken.substring(7);
-    }
-    return null;
-  }
+		return Jwts.builder()//
+				.setClaims(claims)//
+				.setIssuedAt(now)//
+				.setExpiration(validity)//
+				.signWith(SignatureAlgorithm.HS256, secretKey)//
+				.compact();
+	}
 
-  public boolean validateToken(String token) {
-    try {
-      Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-      return true;
-    } catch (JwtException | IllegalArgumentException e) {
-    	e.printStackTrace();
-      throw new CustomException("Expired or invalid JWT token", HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-  }
+	public Authentication getAuthentication(String token) {
+		UserDetails userDetails = myUserDetails.loadUserByUsername(getUsername(token));
+		return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getAuthorities());
+	}
+
+	public String getUsername(String token) {
+		return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+	}
+
+	public String resolveToken(HttpServletRequest req) {
+		String bearerToken = req.getHeader("Authorization");
+		if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+			return bearerToken.substring(7);
+		}
+		return null;
+	}
+
+	public boolean validateToken(String token) {
+		try {
+			Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+			return true;
+		} catch (JwtException | IllegalArgumentException e) {
+			throw new CustomException("Expired or invalid JWT token", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
 }
