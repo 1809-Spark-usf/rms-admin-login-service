@@ -18,7 +18,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class RMSAdminLoginServiceApplication implements CommandLineRunner{
 
 	@Autowired
-	AdminRepository adminService;
+	AdminRepository adminRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(RMSAdminLoginServiceApplication.class, args);
@@ -35,6 +35,6 @@ public class RMSAdminLoginServiceApplication implements CommandLineRunner{
 		ArrayList<Role> tmp = new ArrayList<Role>();
 		admin.setRoles(tmp);
 
-		adminService.save(admin);
+		adminRepository.save(admin);
 	}
 }
