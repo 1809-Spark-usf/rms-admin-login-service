@@ -1,8 +1,15 @@
 package com.revature.dtos;
 
+import java.util.List;
+
+import com.revature.models.Role;
 
 public class AdminDto {
-	
+
+	private int adminId;
+
+	List<Role> roles;
+
 	private String firstname;
 
 	private String lastname;
@@ -10,6 +17,16 @@ public class AdminDto {
 	private String username;
 
 	private String password;
+
+	private String token;
+	
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
 
 	public String getFirstname() {
 		return firstname;
@@ -29,15 +46,16 @@ public class AdminDto {
 
 	public AdminDto() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public AdminDto(int adminId, String firstname, String lastname, String username, String password) {
+	public AdminDto(int adminId, String firstname, String lastname, String username, String password, List<Role> roles) {
 		super();
+		this.adminId = adminId;
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.username = username;
 		this.password = password;
+		this.roles = roles;
 	}
 
 	public String getUsername() {
@@ -56,9 +74,20 @@ public class AdminDto {
 		this.password = password;
 	}
 
-	@Override
-	public String toString() {
-		return "Admin [firstname=" + firstname + ", lastname=" + lastname + ", username="
-				+ username + ", password=" + password + "]";
+	public int getAdminId() {
+		return adminId;
 	}
+
+	public void setAdminId(int adminId) {
+		this.adminId = adminId;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+	
 }

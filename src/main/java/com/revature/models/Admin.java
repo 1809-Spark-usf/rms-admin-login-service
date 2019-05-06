@@ -1,6 +1,12 @@
 package com.revature.models;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,6 +24,9 @@ public class Admin {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int adminId;
+	
+	@ElementCollection(fetch = FetchType.EAGER)
+	List<Role> roles;
 
 	private String firstname;
 
@@ -27,6 +36,17 @@ public class Admin {
 
 	private String password;
 
+	private String token;
+	
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
+
+	
 	public String getFirstname() {
 		return firstname;
 	}
@@ -45,16 +65,15 @@ public class Admin {
 
 	public Admin() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public Admin(int adminId, String firstname, String lastname, String username, String password) {
+	public Admin(String firstname, String lastname, String username, String password) {
 		super();
-		this.adminId = adminId;
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.username = username;
 		this.password = password;
+		this.roles = new ArrayList<Role>(Arrays.asList(Role.ROLE_ADMIN));
 	}
 
 	public String getUsername() {
@@ -83,8 +102,18 @@ public class Admin {
 
 	@Override
 	public String toString() {
-		return "Admin [adminId=" + adminId + ", firstname=" + firstname + ", lastname=" + lastname + ", username="
-				+ username + ", password=" + password + "]";
+		return "Admin [adminId=" + adminId + ", roles=" + roles + ", firstname=" + firstname + ", lastname=" + lastname
+				+ ", username=" + username + ", password=" + password + "]";
 	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	
 
 }
