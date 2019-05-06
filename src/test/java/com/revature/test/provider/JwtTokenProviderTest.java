@@ -120,6 +120,7 @@ public class JwtTokenProviderTest {
 	public void resolveTokenTestSuccess() {
 		HttpServletRequest request = mock(HttpServletRequest.class);
 		//build request header
+		Mockito.when(request.getHeader("Authorization")).thenReturn("Bearer hi");
 		String subString = jwtTokenProvider.resolveToken(request);
 		assertNotNull(subString);
 	}
