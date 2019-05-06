@@ -2,15 +2,19 @@ package com.revature.test.provider;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
@@ -30,6 +34,7 @@ import io.jsonwebtoken.Jwts;
 
 /**
  * 
+ * @author Quinton Cook
  * @author Alim Wooden
  *
  */
@@ -102,13 +107,28 @@ public class JwtTokenProviderTest {
 	}
 
 	@Test(expected = CustomException.class)
-	public void resolveTokenTestFailureIllegalArument() {
+	public void validateTokenTestFailureIllegalArument() {
 		jwtTokenProvider.validateToken("stuff");
 	}
 
 	@Test(expected = CustomException.class)
-	public void resolveTokenTestFailureJwtException() {
+	public void validateTokenTestFailureJwtException() {
 		jwtTokenProvider.validateToken("test");
+	}
+	
+	@Test
+	public void resolveTokenTestSuccess() {
+		HttpServletRequest request = mock(HttpServletRequest.class);
+		//build request header
+		String subString = jwtTokenProvider.resolveToken(request);
+		assertNotNull(subString);
+	}
+	
+	@Test
+	public void resolveTokenTestFailure() {
+		HttpServletRequest request = mock(HttpServletRequest.class);
+		String subString = jwtTokenProvider.resolveToken(request);
+		assertNull(subString);
 	}
 
 }
